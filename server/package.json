@@ -1,0 +1,9 @@
+{
+  "name": "dristi_nayan_server",
+  "version": "1.0.0",
+  "main": "NServer.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
