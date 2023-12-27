@@ -1,10 +1,20 @@
-let express = require('express');
-let App = express();
+const express = require("express");
+const App = express();
+const CORS = require("cors");
+const BodyParser = require('body-parser');
+const auth = require("./routes/auth/index");
 
-App.use('/', (req, res)=>{
-    res.send("hello world");
-})
+App.use(CORS());
+App.use(express.json());
 
-App.listen(5000, ()=>{
-    console.log("Server Running at http://localhost:5000");
-})
+// Parse application/json
+App.use(BodyParser.json());
+// Parse application/json
+App.use(BodyParser.urlencoded({ extended: false }));
+
+//Routes
+App.use("/auth", auth);
+
+App.listen(5000, () => {
+  console.log("Dristi Server Running at http://localhost:5000");
+});
