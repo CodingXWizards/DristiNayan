@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:dristi_nayan/Screens/Components/input.dart';
 import 'package:dristi_nayan/Screens/home.dart';
 import 'package:dristi_nayan/Screens/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tailwindcss_defaults/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -15,6 +18,25 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  Future<void> login(userId, password) async {
+    const String url = "http://localhost:5000/auth/login";
+    try {
+      final res = await http.post(Uri.parse(url),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(
+              <String, dynamic>{'userId': userId, 'password': password}));
+      if (res.statusCode == 200) {
+        print(res.body);
+      } else {
+        print(res.statusCode);
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,10 +109,11 @@ class _LoginState extends State<Login> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Home()));
+                          login(emailController.text, passwordController.text);
+                          // Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => const Home()));
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
