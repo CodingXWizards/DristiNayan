@@ -14,6 +14,7 @@ Router
         body('userId', "Please enter a valid id").isLength({ min: 3 }),
         body('password', "Please enter a password more than 5 letters").isLength({ min: 5 }),
     ], async (req, res) => {
+        console.log(req.body);
         try {
             let errors = validationResult(req);
             if (!errors.isEmpty()) return res.status(400).json({ erros: errors.array() })
@@ -53,7 +54,8 @@ Router
 
                 const data = { user: { id: user.UserID } };
                 const authToken = JWT.sign(data, secretKey);
-                res.status(200).json({ user, authToken });
+                const {Password, ...others} = user;
+                res.status(200).json({ others, authToken });
             })
         } catch (error) {
             console.error(error);

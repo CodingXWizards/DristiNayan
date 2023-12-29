@@ -24,8 +24,8 @@ connection.query("SHOW TABLES", (err, result) => {
   //If Users Table does exists it will return else will create it.
   if (tableExists.length != 0) return;
 
-  connection.query("CREATE TABLE Users(Name VARCHAR(20) NOT NULL, UserID VARCHAR(20) NOT NULL PRIMARY KEY, Password VARCHAR(20) NOT NULL, Phone INT(10) UNIQUE)")
-  console.log("Users Table Create as it didn't existed!");
+  connection.query("CREATE TABLE Users(Name VARCHAR(20) NOT NULL, UserID VARCHAR(20) NOT NULL PRIMARY KEY, Password VARCHAR(100) NOT NULL, Phone INT(10) UNIQUE)")
+  console.log("Users Table Created as it didn't existed!");
 })
 
 //  CREATE TABLE Users(Name VARCHAR(20) NOT NULL, UserID VARCHAR(20) NOT NULL PRIMARY KEY, Password VARCHAR(20) NOT NULL, Phone INT(10) UNIQUE);
