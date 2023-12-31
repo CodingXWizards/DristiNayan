@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tailwindcss_defaults/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -22,7 +23,6 @@ class _SignupState extends State<Signup> {
   Future<void> signup(name, userId, password) async {
     const String url = 'http://localhost:5000/auth/signup';
     try {
-      print('$userId $password');
       final res = await http.post(Uri.parse(url),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -124,10 +124,12 @@ class _SignupState extends State<Signup> {
                         onPressed: () {
                           signup(nameController.text, userIdController.text,
                               passwordController.text);
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const Home()));
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Home(),
+                                  settings: const RouteSettings(name: '/')
+                                  ));
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -159,7 +161,9 @@ class _SignupState extends State<Signup> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Login()));
+                                      builder: (context) => const Login(),
+                                      settings: const RouteSettings(name: '/login')
+                                      ));
                             },
                             child: Text(
                               "Login",

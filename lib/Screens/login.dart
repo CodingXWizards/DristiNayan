@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:dristi_nayan/Models/User.dart';
 import 'package:dristi_nayan/Screens/Components/input.dart';
 import 'package:dristi_nayan/Screens/home.dart';
 import 'package:dristi_nayan/Screens/signup.dart';
@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tailwindcss_defaults/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -16,10 +17,13 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final emailController = TextEditingController();
+  final userIdController = TextEditingController();
   final passwordController = TextEditingController();
+  String info = "";
+  bool isLoading = false;
 
-  Future<void> login(userId, password) async {
+  Future<int> login(userId, password) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
     const String url = "http://localhost:5000/auth/login";
     try {
       final res = await http.post(Uri.parse(url),
@@ -29,12 +33,20 @@ class _LoginState extends State<Login> {
           body: jsonEncode(
               <String, dynamic>{'userId': userId, 'password': password}));
       if (res.statusCode == 200) {
-        print(res.body);
-      } else {
-        print(res.statusCode);
+        AuthToken? user =
+            AuthToken.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+        String? authToken = user.authToken;
+        String? userId = user.user?.userID;
+        if (authToken != null && userId != null) {
+          sp.setString('authToken', authToken);
+          sp.setString('userId', userId);
+        }
       }
+      return res.statusCode;
     } catch (error) {
-      print(error);
+      info = "error";
+      isLoading = false;
+      return 500;
     }
   }
 
@@ -92,8 +104,8 @@ class _LoginState extends State<Login> {
                         height: 20,
                       ),
                       Input(
-                        controller: emailController,
-                        hintText: "Email",
+                        controller: userIdController,
+                        hintText: "UserID",
                         keyboard: TextInputType.text,
                       ),
                       const SizedBox(
@@ -105,15 +117,46 @@ class _LoginState extends State<Login> {
                           keyboard: TextInputType.text,
                           isPassword: true),
                       const SizedBox(
-                        height: 32,
+                        height: 20,
+                      ),
+                      Text(
+                        info,
+                        style: GoogleFonts.firaSans(
+                            color: TailwindColors.red, fontSize: 16),
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          login(emailController.text, passwordController.text);
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const Home()));
+                          setState(() => isLoading = true);
+                          // setState(() {
+                          login(userIdController.text, passwordController.text)
+                              .then((value) {
+                            switch (value) {
+                              case 200:
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const Home(),
+                                        settings:
+                                            const RouteSettings(name: '/')));
+                                break;
+                              case 404:
+                                info = "UserID is incorrect!";
+                                break;
+                              case 400:
+                                info = "Password is incorrect";
+                                break;
+                              case 500:
+                                info = "Internal Server Error";
+                                break;
+                              default:
+                                info = "Unexpected Error!";
+                            }
+                            setState(() => isLoading = false);
+                          });
+                          // });
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -122,7 +165,7 @@ class _LoginState extends State<Login> {
                           minimumSize: const Size(double.infinity, 50),
                         ),
                         child: Text(
-                          "Login",
+                          isLoading ? "Loading..." : "Login",
                           style: GoogleFonts.firaSans(fontSize: 18),
                         ),
                       ),
@@ -145,7 +188,9 @@ class _LoginState extends State<Login> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Signup()));
+                                      builder: (context) => const Signup(),
+                                      settings: const RouteSettings(
+                                          name: '/signup')));
                             },
                             child: Text(
                               "Sign up",

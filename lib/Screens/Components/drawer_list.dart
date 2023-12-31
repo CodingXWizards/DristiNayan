@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tailwindcss_defaults/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerList extends StatefulWidget {
   const DrawerList({super.key});
@@ -24,13 +25,24 @@ class _DrawerListState extends State<DrawerList> {
       "name": "Logout",
     },
   ];
+
+  void clearSP()async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {
         return InkWell(
-          onTap: () {},
+          onTap: () {
+            if(items[index]['name'] == 'Logout'){
+              clearSP();
+              Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => true);
+            }
+          },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             margin: const EdgeInsets.symmetric(vertical: 4),

@@ -22,12 +22,14 @@ class _SplashScreen extends State<SplashScreen> {
 
   void start() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    final isLogin = sp.getBool("isLogin") ?? false;
+    String? authToken = sp.getString('authToken');
+    bool isLogin = authToken != null ? true : false;
     Timer(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => isLogin ? const Home() : const Login(),
+            settings: RouteSettings(name: isLogin ? '/home' : '/login')
           ));
     });
   }
