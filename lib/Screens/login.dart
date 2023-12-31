@@ -129,7 +129,18 @@ class _LoginState extends State<Login> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          setState(() => isLoading = true);
+                          if (userIdController.text.length < 3) {
+                            setState(() => info =
+                                "UserID should more be more than 3 letters");
+                            return;
+                          } else if (passwordController.text.length < 5) {
+                            setState(() => info =
+                                "Password should be more than 5 letters");
+                            return;
+                          }
+                          setState(() {
+                            isLoading = true;
+                          });
                           // setState(() {
                           login(userIdController.text, passwordController.text)
                               .then((value) {
@@ -152,7 +163,7 @@ class _LoginState extends State<Login> {
                                 info = "Internal Server Error";
                                 break;
                               default:
-                                info = "Unexpected Error!";
+                                info = "An unexpected error occured!";
                             }
                             setState(() => isLoading = false);
                           });

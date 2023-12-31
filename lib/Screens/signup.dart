@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dristi_nayan/Models/User.dart';
 import 'package:dristi_nayan/Screens/Components/input.dart';
 import 'package:dristi_nayan/Screens/home.dart';
 import 'package:dristi_nayan/Screens/login.dart';
@@ -19,9 +20,12 @@ class _SignupState extends State<Signup> {
   final nameController = TextEditingController();
   final userIdController = TextEditingController();
   final passwordController = TextEditingController();
+  bool isLoading = false;
+  String info = "";
 
-  Future<void> signup(name, userId, password) async {
+  Future<int> signup(name, userId, password) async {
     const String url = 'http://localhost:5000/auth/signup';
+    SharedPreferences sp = await SharedPreferences.getInstance();
     try {
       final res = await http.post(Uri.parse(url),
           headers: <String, String>{
@@ -33,12 +37,20 @@ class _SignupState extends State<Signup> {
             'password': password
           }));
       if (res.statusCode == 200) {
-        print(res.body);
-      } else {
-        print(res.body);
+        AuthToken user =
+            AuthToken.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+        String? authToken = user.authToken;
+        String? userID = user.user?.userID;
+        if (authToken != null && userID != null) {
+          sp.setString('authToken', authToken);
+          sp.setString('userID', userID);
+        }
       }
+      return res.statusCode;
     } catch (error) {
-      print(error);
+      print("hello");
+      info = "Internal Server Error!";
+      return 500;
     }
   }
 
@@ -118,18 +130,57 @@ class _SignupState extends State<Signup> {
                           keyboard: TextInputType.text,
                           isPassword: true),
                       const SizedBox(
-                        height: 32,
+                        height: 20,
+                      ),
+                      Text(
+                        info,
+                        style: GoogleFonts.firaSans(
+                            color: TailwindColors.red, fontSize: 16),
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                       ElevatedButton(
                         onPressed: () {
+                          if (nameController.text.length < 3) {
+                            setState(() =>
+                                info = "Name should be more than 3 letter");
+                            return;
+                          } else if (userIdController.text.length < 3) {
+                            setState(() =>
+                                info = "UserID should be more than 3 letters");
+                            return;
+                          } else if (passwordController.text.length < 5) {
+                            setState(() => info =
+                                "Password should be more than 5 letters");
+                            return;
+                          }
+                          setState(() => isLoading = true);
                           signup(nameController.text, userIdController.text,
-                              passwordController.text);
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Home(),
-                                  settings: const RouteSettings(name: '/')
-                                  ));
+                                  passwordController.text)
+                              .then((value) {
+                            switch (value) {
+                              case 200:
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const Home(),
+                                        settings:
+                                            const RouteSettings(name: '/')));
+                                break;
+                              case 400:
+                                setState(() => info =
+                                    "A User already exists with this userID!");
+                                break;
+                              case 500:
+                                setState(() => info = "Internal Server Error!");
+                                break;
+                              default:
+                                setState(() =>
+                                    info = "An unexpected error occured!");
+                            }
+                          });
+                          setState(() => isLoading = false);
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -138,7 +189,7 @@ class _SignupState extends State<Signup> {
                           minimumSize: const Size(double.infinity, 50),
                         ),
                         child: Text(
-                          "Sign up with UserID",
+                          !isLoading ? "Sign up with UserID" : "Loading...",
                           style: GoogleFonts.firaSans(fontSize: 18),
                         ),
                       ),
@@ -162,8 +213,8 @@ class _SignupState extends State<Signup> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => const Login(),
-                                      settings: const RouteSettings(name: '/login')
-                                      ));
+                                      settings:
+                                          const RouteSettings(name: '/login')));
                             },
                             child: Text(
                               "Login",
