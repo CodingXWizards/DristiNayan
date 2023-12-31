@@ -55,7 +55,7 @@ Router
                 const data = { user: { id: user.UserID } };
                 const authToken = JWT.sign(data, secretKey);
                 const {Password, ...others} = user;
-                res.status(200).json({ others, authToken });
+                res.status(200).json({ 'user':others, authToken });
             })
         } catch (error) {
             console.error(error);
