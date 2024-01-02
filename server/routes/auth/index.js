@@ -44,7 +44,7 @@ Router
         try {
             mysql.query("SELECT * FROM Users WHERE UserID=?", [req.body.userId], async (err, result) => {
                 const user = result[0];
-                if (!user) return res.status(404).send("There exists no user with that username")
+                if (!user) return res.status(404).send("There exists no user with this userID");
 
                 const checkPassword = await bcrypt.compare(req.body.password, user.Password);
 
@@ -58,6 +58,19 @@ Router
         } catch (error) {
             console.error(error);
             res.status(500).send("Internal Server Error!");
+        }
+    })
+
+    .get('/user', (req, res)=>{
+        try {
+            mysql.query("SELECT * FROM Users WHERE UserID=?", [req.query.userID], async(err, result)=>{
+                const user = result[0];
+                if(!user) return res.status(404).send("There exists no user with this userID");
+                const {Password, ...userData} = user;
+                res.status(200).json(userData);
+            })
+        } catch (error) {
+            res.status(500).send(error);
         }
     })
 
