@@ -47,7 +47,7 @@ class _AccountDestinationState extends State<AccountDestination> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -117,7 +117,7 @@ class _AccountDestinationState extends State<AccountDestination> {
                   minimumSize: const Size(double.infinity, 50)),
               child: Text(
                 "Sign Out",
-                style: GoogleFonts.firaSans(fontSize: 20),
+                style: GoogleFonts.firaSans(fontSize: 20, color: Colors.white),
               ))
         ],
       ),

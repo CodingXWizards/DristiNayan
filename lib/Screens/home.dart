@@ -17,23 +17,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   int currentPageIndex = 0;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void printCurrentRoute(BuildContext context) {
-    final currentRoute = ModalRoute.of(context);
-    if (currentRoute != null) {
-      print('Current Route Name: ${currentRoute.settings.name}');
-      print('Current Route Arguments: ${currentRoute.settings.arguments}');
-      // You can print more details or properties of the current route if needed
-    } else {
-      print('No current route found');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
           backgroundColor: TailwindColors.blue,
+          foregroundColor: Colors.white,
           title: Text(
             "Dristi Nayan",
             textAlign: TextAlign.center,
