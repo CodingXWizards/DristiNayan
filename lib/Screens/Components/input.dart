@@ -22,11 +22,12 @@ class Input extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         labelText: hintText,
+        labelStyle: const TextStyle(color: TailwindColors.gray),
         fillColor: TailwindColors.coolGray.shade100,
         contentPadding: const EdgeInsets.symmetric(horizontal: 12),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: TailwindColors.blueGray),
+          borderSide: const BorderSide(color: TailwindColors.blueGray),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),

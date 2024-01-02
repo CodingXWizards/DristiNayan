@@ -46,7 +46,7 @@ class _SplashScreen extends State<SplashScreen> {
               borderRadius: BorderRadius.circular(16),
               child: Image(
                 width: size.width * 0.6,
-                image: const AssetImage("assets/images/Logo.webp"),
+                image: const AssetImage("assets/images/logo.webp"),
                 fit: BoxFit.fitHeight,
               ),
             ),

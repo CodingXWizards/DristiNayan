@@ -28,9 +28,9 @@ class _HomeDestinationState extends State<HomeDestination>
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(16),
-      child: SingleChildScrollView(
+    return const SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(16),
         child: Column(
           children: [
             HomeTile(
