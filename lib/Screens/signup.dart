@@ -48,7 +48,6 @@ class _SignupState extends State<Signup> {
       }
       return res.statusCode;
     } catch (error) {
-      print("hello");
       info = "Internal Server Error!";
       return 500;
     }

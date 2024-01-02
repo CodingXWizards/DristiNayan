@@ -1,6 +1,11 @@
+import 'dart:convert';
+
+import 'package:dristi_nayan/Models/User.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tailwindcss_defaults/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class AccountDestination extends StatefulWidget {
   const AccountDestination({super.key});
@@ -10,6 +15,35 @@ class AccountDestination extends StatefulWidget {
 }
 
 class _AccountDestinationState extends State<AccountDestination> {
+  User user = User();
+  String name = "";
+
+  void clearSP() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.clear();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
+  Future<void> getUser() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String? userID = sp.getString('userId');
+    String url = "http://localhost:5000/auth/user?userID=$userID";
+    try {
+      final res = await http.get(Uri.parse(url));
+      user = User.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+      if (user.name?.isNotEmpty == true) {
+        setState(() => name = "${user.name}");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -35,7 +69,7 @@ class _AccountDestinationState extends State<AccountDestination> {
               size: 50,
             ),
             title: Text(
-              "Vipin Kumar Gautam",
+              name,
               style: GoogleFonts.firaSans(fontSize: 20),
             ),
             subtitle: Text(
@@ -70,7 +104,11 @@ class _AccountDestinationState extends State<AccountDestination> {
             height: 20,
           ),
           ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                clearSP();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, "/login", (route) => false);
+              },
               style: ElevatedButton.styleFrom(
                   backgroundColor: TailwindColors.blue,
                   shape: RoundedRectangleBorder(

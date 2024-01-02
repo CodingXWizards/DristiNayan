@@ -40,7 +40,7 @@ class _DrawerListState extends State<DrawerList> {
           onTap: () {
             if(items[index]['name'] == 'Logout'){
               clearSP();
-              Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => true);
+              Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
             }
           },
           child: Container(
