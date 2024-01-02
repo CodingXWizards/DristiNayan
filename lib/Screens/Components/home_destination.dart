@@ -40,7 +40,6 @@ class _HomeDestinationState extends State<HomeDestination>
               button: "View Now",
               image: "realtime.svg",
             ),
-            SizedBox(height: 12,),
             HomeTile(
               title: "Track Criminals & Crime",
               desc:
@@ -48,7 +47,6 @@ class _HomeDestinationState extends State<HomeDestination>
               button: "View Now",
               image: "track.svg",
             ),
-            SizedBox(height: 12,),
             HomeTile(
               title: "Add/Edit Criminal Detail",
               desc:
@@ -78,7 +76,7 @@ class HomeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 225,
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -89,45 +87,48 @@ class HomeTile extends StatelessWidget {
                 blurRadius: 12,
                 spreadRadius: 2)
           ]),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.raleway(
-                      fontSize: 20,
-                      color: TailwindColors.blueGray.shade600,
-                      fontWeight: FontWeight.w600),
-                ),
-                Flexible(
-                  child: Text(
-                    desc,
-                    style: GoogleFonts.raleway(color: TailwindColors.blueGray),
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.raleway(
+                        fontSize: 20,
+                        color: TailwindColors.blueGray.shade600,
+                        fontWeight: FontWeight.w600),
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: TailwindColors.blue),
-                  child: Text(
-                    button,
-                    style: GoogleFonts.firaSans(color: TailwindColors.white),
+                  const SizedBox(height: 12,),
+                  Flexible(
+                    child: Text(
+                      desc,
+                      style: GoogleFonts.raleway(color: TailwindColors.blueGray),
+                    ),
                   ),
-                )
-              ],
+                  const SizedBox(height: 16,),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: TailwindColors.blue),
+                    child: Text(
+                      button,
+                      style: GoogleFonts.firaSans(color: TailwindColors.white),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          SvgPicture.asset(
-            'assets/images/$image',
-            width: 120,
-          )
-        ],
+            SvgPicture.asset(
+              'assets/images/$image',
+              width: 120,
+            )
+          ],
+        ),
       ),
     );
   }
