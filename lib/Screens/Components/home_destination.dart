@@ -10,53 +10,52 @@ class HomeDestination extends StatefulWidget {
   State<HomeDestination> createState() => _HomeDestinationState();
 }
 
-class _HomeDestinationState extends State<HomeDestination>
-    with TickerProviderStateMixin {
-  late final TabController _tabcontroller;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabcontroller = TabController(length: 4, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabcontroller.dispose();
-    super.dispose();
-  }
+class _HomeDestinationState extends State<HomeDestination> {
+  List homeTileInfo = [
+    {
+      "title": "Real-Time Crowd Monitoring",
+      "desc":
+          "Real-time crowd monitoring instantly tracks and manages people's movements in a specific area.",
+      "button": "View Now",
+      "image": "realtime.svg",
+      "routePath": "realtime",
+      "screenName": "realtime",
+    },
+    {
+      "title": "Track Criminals & Crime",
+      "desc":
+          "CCTV integration enhances security by consolidating surveillance data, enabling comprehensive monitoring, and facilitating efficient incident response.",
+      "button": "View Now",
+      "image": "track.svg",
+      "routePath": "trackCriminal",
+      "screenName": "track_criminal",
+    },
+    {
+      "title": "Add/Edit Criminal Detail",
+      "desc":
+          "GPS tracking for emergency response enables precise location identification, facilitating swift and accurate deployment of resources during critical situations.",
+      "button": "Edit Now",
+      "image": "crime.svg",
+      "route": "editCriminal",
+      "screenName": "edit_criminal",
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            HomeTile(
-              title: "Real-Time Crowd Monitoring",
-              desc:
-                  "Real-time crowd monitoring instantly tracks and manages people's movements in a specific area.",
-              button: "View Now",
-              image: "realtime.svg",
-            ),
-            HomeTile(
-              title: "Track Criminals & Crime",
-              desc:
-                  "CCTV integration enhances security by consolidating surveillance data, enabling comprehensive monitoring, and facilitating efficient incident response.",
-              button: "View Now",
-              image: "track.svg",
-            ),
-            HomeTile(
-              title: "Add/Edit Criminal Detail",
-              desc:
-                  "GPS tracking for emergency response enables precise location identification, facilitating swift and accurate deployment of resources during critical situations.",
-              button: "Edit Now",
-              image: "crime.svg",
-            ),
-          ],
-        ),
-      ),
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: homeTileInfo.length,
+      itemBuilder: (context, index) {
+        return HomeTile(
+            title: homeTileInfo[index]["title"],
+            desc: homeTileInfo[index]["desc"],
+            button: homeTileInfo[index]["button"],
+            image: homeTileInfo[index]["image"],
+            route: homeTileInfo[index]["route"],
+            screenName: homeTileInfo[index]["screenName"]
+            );
+      },
     );
   }
 }
@@ -66,12 +65,17 @@ class HomeTile extends StatelessWidget {
   final String desc;
   final String button;
   final String image;
+  final String route;
+  final String screenName;
   const HomeTile(
       {super.key,
       required this.title,
       required this.desc,
       required this.button,
-      required this.image});
+      required this.image,
+      required this.route,
+      required this.screenName,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -88,45 +92,62 @@ class HomeTile extends StatelessWidget {
                 spreadRadius: 2)
           ]),
       child: IntrinsicHeight(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              title,
+              style: GoogleFonts.raleway(
+                  fontSize: 20,
+                  color: TailwindColors.blueGray.shade600,
+                  fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
             Expanded(
-              child: Column(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.raleway(
-                        fontSize: 20,
-                        color: TailwindColors.blueGray.shade600,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 12,),
-                  Flexible(
-                    child: Text(
-                      desc,
-                      style: GoogleFonts.raleway(color: TailwindColors.blueGray),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            desc,
+                            style: GoogleFonts.raleway(
+                                color: TailwindColors.blueGray, fontSize: 12),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              backgroundColor: TailwindColors.blue),
+                          child: Text(
+                            button,
+                            style: GoogleFonts.firaSans(
+                                color: TailwindColors.white, fontSize: 12),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 16,),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: TailwindColors.blue),
-                    child: Text(
-                      button,
-                      style: GoogleFonts.firaSans(color: TailwindColors.white),
-                    ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  SvgPicture.asset(
+                    'assets/images/$image',
+                    width: 100,
                   )
                 ],
               ),
             ),
-            SvgPicture.asset(
-              'assets/images/$image',
-              width: 120,
-            )
           ],
         ),
       ),

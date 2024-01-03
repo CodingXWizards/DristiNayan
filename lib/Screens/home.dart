@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   int currentPageIndex = 0;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +54,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           });
         },
         indicatorColor: TailwindColors.blue,
+        backgroundColor: TailwindColors.white,
+        shadowColor: TailwindColors.black,
+        surfaceTintColor: TailwindColors.white,
         selectedIndex: currentPageIndex,
         destinations: [
           NavigationDestination(
