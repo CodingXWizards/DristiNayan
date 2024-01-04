@@ -168,7 +168,7 @@ class _SignupState extends State<Signup> {
                                         MaterialPageRoute(
                                             builder: (context) => const Home(),
                                             settings:
-                                                const RouteSettings(name: '/')));
+                                                const RouteSettings(name: '/home')));
                                     break;
                                   case 400:
                                     setState(() => info =

@@ -155,7 +155,7 @@ class _LoginState extends State<Login> {
                                         MaterialPageRoute(
                                             builder: (context) => const Home(),
                                             settings: const RouteSettings(
-                                                name: '/')));
+                                                name: '/home')));
                                     break;
                                   case 404:
                                     info = "UserID is incorrect!";
