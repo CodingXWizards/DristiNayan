@@ -14,7 +14,7 @@ class _TrackCriminal extends State<TrackCriminal> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       child: Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,26 +44,37 @@ class _TrackCriminal extends State<TrackCriminal> {
             const SizedBox(
               height: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(4)),
+                // border: Border.all(color: TailwindColors.blueGray),
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                      color: TailwindColors.blueGray.shade200)
+                ],
+                color: TailwindColors.white,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Name",
-                    style: GoogleFonts.firaSans(),
+                    style: GoogleFonts.firaSans(color: TailwindColors.blueGray.shade700),
                   ),
                   Text(
                     "Crime History",
-                    style: GoogleFonts.firaSans(),
+                    style: GoogleFonts.firaSans(color: TailwindColors.blueGray.shade700),
                   ),
                   Text(
                     "Record",
-                    style: GoogleFonts.firaSans(),
+                    style: GoogleFonts.firaSans(color: TailwindColors.blueGray.shade700),
                   ),
                   Text(
                     "Photo",
-                    style: GoogleFonts.firaSans(),
+                    style: GoogleFonts.firaSans(color: TailwindColors.blueGray.shade700),
                   ),
                 ],
               ),
@@ -133,20 +144,28 @@ class RecordPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(4)),
-          border: Border.all(color: TailwindColors.blueGray)),
+        borderRadius: const BorderRadius.all(Radius.circular(4)),
+        // border: Border.all(color: TailwindColors.blueGray),
+        boxShadow: [
+          BoxShadow(
+              blurRadius: 10,
+              spreadRadius: 2,
+              color: TailwindColors.blueGray.shade200)
+        ],
+        color: TailwindColors.white,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             name,
-            style: GoogleFonts.firaSans(color: TailwindColors.blueGray),
+            style: GoogleFonts.firaSans(color: TailwindColors.blueGray.shade600),
           ),
           Text(
             crimeHist,
-            style: GoogleFonts.firaSans(color: TailwindColors.blueGray),
+            style: GoogleFonts.firaSans(color: TailwindColors.blueGray.shade600),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,23 +173,23 @@ class RecordPanel extends StatelessWidget {
               Text(
                 record["detected"],
                 style: GoogleFonts.firaSans(
-                    color: TailwindColors.blueGray, fontSize: 12),
+                    color: TailwindColors.blueGray.shade600, fontSize: 12),
               ),
               Text(
                 record["date"],
                 style: GoogleFonts.firaSans(
-                    color: TailwindColors.blueGray, fontSize: 12),
+                    color: TailwindColors.blueGray.shade600, fontSize: 12),
               ),
               Text(
                 record["time"],
                 style: GoogleFonts.firaSans(
-                    color: TailwindColors.blueGray, fontSize: 12),
+                    color: TailwindColors.blueGray.shade600, fontSize: 12),
               ),
             ],
           ),
           Text(
             "Photo",
-            style: GoogleFonts.firaSans(color: TailwindColors.blueGray),
+            style: GoogleFonts.firaSans(color: TailwindColors.blueGray.shade600),
           ),
         ],
       ),
