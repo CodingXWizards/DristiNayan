@@ -50,7 +50,7 @@ class _DrawerListState extends State<DrawerList> {
               items[index]['name'],
               style: GoogleFonts.firaSans(
                 color: TailwindColors.blueGray.shade700,
-                fontSize: 18,
+                fontSize: 16,
               ),
             ),
           ),

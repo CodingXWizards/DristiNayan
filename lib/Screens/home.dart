@@ -40,8 +40,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             )
           ]),
       drawer: const Drawer(
+        backgroundColor: Colors.white,
           child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 8), child: DrawerList())),
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 4), child: DrawerList())),
       body: const <Widget>[
         HomeDestination(),
         AccountDestination(),
