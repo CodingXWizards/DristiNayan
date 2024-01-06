@@ -59,7 +59,7 @@ class _AccountDestinationState extends State<AccountDestination> {
                 fontSize: 32, color: TailwindColors.blueGray.shade600),
           ),
           const SizedBox(
-            height: 20,
+            height: 16,
           ),
           ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 0),
@@ -70,15 +70,15 @@ class _AccountDestinationState extends State<AccountDestination> {
             ),
             title: Text(
               name,
-              style: GoogleFonts.firaSans(fontSize: 20),
+              style: GoogleFonts.firaSans(fontSize: 18),
             ),
             subtitle: Text(
               "Railway Official",
-              style: GoogleFonts.firaSans(fontSize: 16),
+              style: GoogleFonts.firaSans(),
             ),
           ),
           const SizedBox(
-            height: 20,
+            height: 12,
           ),
           const Column(
             children: [
@@ -101,7 +101,7 @@ class _AccountDestinationState extends State<AccountDestination> {
             ],
           ),
           const SizedBox(
-            height: 20,
+            height: 40,
           ),
           ElevatedButton(
               onPressed: () {
@@ -112,12 +112,12 @@ class _AccountDestinationState extends State<AccountDestination> {
               style: ElevatedButton.styleFrom(
                   backgroundColor: TailwindColors.blue,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  minimumSize: const Size(double.infinity, 50)),
+                  minimumSize: const Size(double.infinity, 44)),
               child: Text(
                 "Sign Out",
-                style: GoogleFonts.firaSans(fontSize: 20, color: Colors.white),
+                style: GoogleFonts.firaSans(fontSize: 16, color: Colors.white),
               ))
         ],
       ),
@@ -136,17 +136,24 @@ class SettingButtons extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-          border: Border.all(color: TailwindColors.blueGray.shade400),
-          borderRadius: BorderRadius.circular(8)),
+          color: Colors.white,
+          // border: Border.all(color: TailwindColors.blueGray.shade400),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+                spreadRadius: 2,
+                blurRadius: 8,
+                color: TailwindColors.blueGray.shade200)
+          ]),
       child: ListTile(
         leading: Icon(
           iconName,
-          size: 30,
+          size: 24,
           color: TailwindColors.blueGray,
         ),
         title: Text(
           title,
-          style: GoogleFonts.firaSans(fontSize: 18),
+          style: GoogleFonts.firaSans(fontSize: 16),
         ),
         trailing: const Icon(
           Icons.arrow_forward_ios,
