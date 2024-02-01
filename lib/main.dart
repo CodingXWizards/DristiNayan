@@ -6,9 +6,11 @@ import 'package:dristi_nayan/Screens/signup.dart';
 import 'package:dristi_nayan/Screens/splash_screen.dart';
 import 'package:dristi_nayan/Screens/track_criminal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_tailwindcss_defaults/colors.dart';
 
-void main() {
+Future<void> main() async{
+    await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 

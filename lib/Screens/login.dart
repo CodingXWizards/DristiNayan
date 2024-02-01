@@ -4,6 +4,7 @@ import 'package:dristi_nayan/Screens/Components/input.dart';
 import 'package:dristi_nayan/Screens/home.dart';
 import 'package:dristi_nayan/Screens/signup.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_tailwindcss_defaults/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +25,8 @@ class _LoginState extends State<Login> {
 
   Future<int> login(userId, password) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    const String url = "http://localhost:5000/auth/login";
+    String? server = dotenv.env['SERVER_URL'];
+    String url = "$server/auth/login";
     try {
       final res = await http.post(Uri.parse(url),
           headers: <String, String>{
@@ -57,7 +59,7 @@ class _LoginState extends State<Login> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: SizedBox(
-            height: size.height-100,
+            height: size.height - 100,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,

@@ -4,6 +4,7 @@ import 'package:dristi_nayan/Screens/Components/input.dart';
 import 'package:dristi_nayan/Screens/home.dart';
 import 'package:dristi_nayan/Screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_tailwindcss_defaults/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +25,8 @@ class _SignupState extends State<Signup> {
   String info = "";
 
   Future<int> signup(name, userId, password) async {
-    const String url = 'http://localhost:5000/auth/signup';
+    String? server = dotenv.env['SERVER_URL'];
+    String url = '$server/auth/signup';
     SharedPreferences sp = await SharedPreferences.getInstance();
     try {
       final res = await http.post(Uri.parse(url),
