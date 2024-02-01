@@ -1,3 +1,6 @@
+import "dart:io";
+
+import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
 import "package:flutter_tailwindcss_defaults/colors.dart";
 import "package:google_fonts/google_fonts.dart";
@@ -11,6 +14,8 @@ class EditCriminal extends StatefulWidget {
 }
 
 class _EditCriminal extends State<EditCriminal> {
+  late FilePickerResult? result;
+  File? image;
   final name = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -46,6 +51,39 @@ class _EditCriminal extends State<EditCriminal> {
             const SizedBox(
               height: 20,
             ),
+            if (image != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.file(
+                  image!,
+                  width: 200,
+                  height: 200,
+                ),
+              ),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                FilePickerResult? result =
+                    await FilePicker.platform.pickFiles(type: FileType.image);
+                if (result != null) {
+                  setState(() => image = File(result.files.single.path!));
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: TailwindColors.blue,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8))),
+              child: Text(
+                "Upload",
+                style: GoogleFonts.firaSans(),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
             Input(
               controller: name,
               label: "Name",
@@ -74,9 +112,39 @@ class _EditCriminal extends State<EditCriminal> {
             const SizedBox(
               height: 20,
             ),
-            Text(
-              "Photo",
-              style: GoogleFonts.firaSans(fontSize: 18),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: TailwindColors.red,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                    child: Text(
+                      "Reset",
+                      style: GoogleFonts.firaSans(),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: TailwindColors.blue,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                    child: Text(
+                      "Save",
+                      style: GoogleFonts.firaSans(),
+                    ),
+                  )
+                ],
+              ),
             )
           ],
         ),
@@ -117,9 +185,9 @@ class Input extends StatelessWidget {
               borderRadius: const BorderRadius.all(Radius.circular(8)),
               boxShadow: [
                 BoxShadow(
-                    blurRadius: 10,
+                    blurRadius: 8,
                     spreadRadius: 2,
-                    color: TailwindColors.blueGray.shade200)
+                    color: TailwindColors.blueGray.shade100)
               ],
             ),
             child: TextFormField(
