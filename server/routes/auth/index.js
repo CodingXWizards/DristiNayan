@@ -20,7 +20,6 @@ Router
             mysql.query("SELECT * FROM Users WHERE UserID = ?", [req.body.userId], async (err, result) => {
                 if (err)
                     res.status(500).json({ "Error": err });
-                console.log(result)
                 if (result.length != 0) return res.status(400).send("A User exists with this UserID")
                 const salt = await bcrypt.genSalt(10);
                 const secPassword = await bcrypt.hash(req.body.password, salt);
