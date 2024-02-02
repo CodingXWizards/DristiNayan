@@ -1,9 +1,13 @@
 import "dart:io";
-
+import "package:dristi_nayan/Screens/Components/date_selector_widget.dart";
+import "package:flutter/services.dart";
+import "package:http/http.dart" as http;
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
+import "package:flutter_dotenv/flutter_dotenv.dart";
 import "package:flutter_tailwindcss_defaults/colors.dart";
 import "package:google_fonts/google_fonts.dart";
+import 'package:image/image.dart' as img;
 
 class EditCriminal extends StatefulWidget {
   final VoidCallback toggleSecondBody;
@@ -16,11 +20,57 @@ class EditCriminal extends StatefulWidget {
 class _EditCriminal extends State<EditCriminal> {
   late FilePickerResult? result;
   File? image;
-  final name = TextEditingController();
+  final TextEditingController name = TextEditingController();
+  final TextEditingController crimeHistory = TextEditingController();
+  final TextEditingController place = TextEditingController();
+  late DateTime? date = DateTime.now();
+  final TextEditingController time = TextEditingController();
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: date ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != date) {
+      setState(() {
+        date = picked;
+      });
+    }
+  }
+
+  Future<void> addCriminal() async {
+    String? server = dotenv.env['SERVER_URL'];
+    String? url = "$server/criminal/add";
+    final req = http.MultipartRequest('POST', Uri.parse(url));
+    req.fields['name'] = name.text;
+    req.fields['crimeHistory'] = crimeHistory.text;
+    req.fields['place'] = place.text;
+    req.fields['date'] = date.toString();
+    req.fields['time'] = time.text;
+    req.files.add(
+      http.MultipartFile(
+        'image',
+        image!.readAsBytes().asStream(),
+        image!.lengthSync(),
+        filename: "image.jpg",
+      ),
+    );
+    try {
+      final res = await http.Response.fromStream(await req.send());
+      if (res.statusCode == 200) {
+        print(res.body);
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
       child: Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -90,22 +140,38 @@ class _EditCriminal extends State<EditCriminal> {
               text: "Enter Name",
             ),
             Input(
-              controller: name,
+              controller: crimeHistory,
               label: "Crime History",
               text: "Enter Crime History",
             ),
             Input(
-              controller: name,
+              controller: place,
               text: "Enter Place",
               label: "Place",
             ),
-            Input(
-              controller: name,
-              text: "Enter Date",
-              label: "Date",
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Date",
+                    textAlign: TextAlign.start,
+                    style: GoogleFonts.firaSans(
+                        fontSize: 18, color: TailwindColors.blueGray.shade600),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  DateSelectorWidget(
+                    selectDate: selectDate,
+                    date: date,
+                  ),
+                ],
+              ),
             ),
             Input(
-              controller: name,
+              controller: time,
               text: "Enter Time",
               label: "Time",
             ),
@@ -132,7 +198,7 @@ class _EditCriminal extends State<EditCriminal> {
                     width: 10,
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => addCriminal(),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: TailwindColors.blue,
                         foregroundColor: Colors.white,
@@ -166,7 +232,7 @@ class Input extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -210,5 +276,23 @@ class Input extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class ImageToBlobConverter {
+  static Future<Uint8List?> convertImageToBlob(String imagePath) async {
+    // Load the image from file
+    img.Image? image = img.decodeImage(await rootBundle
+        .load(imagePath)
+        .then((ByteData data) => data.buffer.asUint8List()));
+
+    if (image != null) {
+      // Encode the image as a Uint8List
+      Uint8List blobData = img.encodePng(image);
+      return blobData;
+    } else {
+      // Image decoding failed
+      return null;
+    }
   }
 }
