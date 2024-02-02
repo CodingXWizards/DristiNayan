@@ -15,7 +15,7 @@ class AuthToken {
     }
 
     Map<String, dynamic> toJson() {
-        final Map<String, dynamic> data = Map<String, dynamic>();
+        final Map<String, dynamic> data = <String, dynamic>{};
         data['user'] = user!.toJson();
         data['authToken'] = authToken;
         return data;
@@ -36,7 +36,7 @@ class User {
     }
 
     Map<String, dynamic> toJson() {
-        final Map<String, dynamic> data = Map<String, dynamic>();
+        final Map<String, dynamic> data = <String, dynamic>{};
         data['Name'] = name;
         data['UserID'] = userID;
         data['Phone'] = phone;
