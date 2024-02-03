@@ -17,15 +17,6 @@ App.use(BodyParser.urlencoded({ extended: false, limit: '50mb' }));
 //Routes
 App.use("/auth", auth);
 App.use("/criminal", criminal);
-App.use('/', (req, res) => {
-  DB.query('SELECT * FROM Users', (error, results) => {
-    if (error) {
-      res.status(500).send('Error retrieving data from the Databse');
-      return;
-    }
-    res.status(200).json(results);
-  })
-})
 
 App.listen(5000, () => {
   console.log("Dristi Server Running at http://localhost:5000");

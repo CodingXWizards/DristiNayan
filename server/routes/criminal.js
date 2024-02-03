@@ -3,13 +3,17 @@ const { body, validationResult } = require('express-validator');
 const mysql = require('../db');
 
 const multer = require('multer');
-const upload = multer({storage: multer.memoryStorage()});
+const upload = multer({ storage: multer.memoryStorage() });
 
 Router.
     get('/', (req, res) => {
         try {
+            mysql.query("SELECT * FROM Criminals", (err, result) => {
+                if (err) return res.status(400).json(err);
+                res.status(200).json(result);
+            });
         } catch (error) {
-
+            console.error(error);
         }
     })
 
@@ -18,7 +22,7 @@ Router.
             let errors = validationResult(req);
             if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-            if(!req.file) return res.status(400).send('No file uploaded');
+            if (!req.file) return res.status(400).send('No file uploaded');
 
             const imageBlob = req.file.buffer;
 
