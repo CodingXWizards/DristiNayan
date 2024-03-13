@@ -23,7 +23,7 @@ migrate_working_dir/
 .vscode/
 
 #Environment
-.env
+# .env
 
 # Flutter/Dart/Pub related
 **/doc/api/
